@@ -171,13 +171,16 @@ def api(method: str, path: str, body: dict | None = None, query: dict | None = N
 
 
 def find_app(bundle_id: str) -> dict:
-    apps = api("GET", "/apps", query={"filter[bundleId]": bundle_id, "fields[apps]": "bundleId,name"})["data"]
+    apps = api("GET", "/apps", query={"fields[apps]": "bundleId,name", "limit": "200"})["data"]
     for app in apps:
         if app["attributes"]["bundleId"] == bundle_id:
             return app
+    existing = "\n".join(f"- {a['attributes']['name']}: {a['attributes']['bundleId']}" for a in apps) or "- (inga)"
     raise ASCError(
         f"Hittar ingen app med bundle-id {bundle_id} i App Store Connect.\n"
-        "Skapa den först: App Store Connect → Appar → + → Ny app (se docs/testflight.md)."
+        f"Bundle-id:t är registrerat, så det går att välja när appen skapas: "
+        "App Store Connect → Appar → + → Ny app (se docs/testflight.md).\n"
+        f"Appar som finns:\n{existing}"
     )
 
 
@@ -212,8 +215,8 @@ def prepare(args) -> None:
         with open(state_path, "w") as file:
             json.dump(state, file, indent=2)
 
-    app = find_app(args.bundle_id)
     bundle = find_or_create_bundle_id(args.bundle_id, args.name)
+    app = find_app(args.bundle_id)
     team_id = bundle["attributes"]["seedId"]
     build_number = next_build_number(app["id"])
 
