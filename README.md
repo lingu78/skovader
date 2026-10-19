@@ -15,7 +15,7 @@ nätverksanropet är vädret (Open-Meteo).
 | 1. Grund | XcodeGen-projekt, datamodeller, regelmotor med enhetstester | Klar |
 | 2. Skor | Mina skor, kamera/bildval, utklippning, redigering, borttagning | Klar |
 | 3. Väder och Idag | Open-Meteo, plats/ort, cache, rekommendation, "Jag tar dessa", morgonnotis | Klar |
-| 4. TestFlight | Ikon, version 0.1, arkivering och uppladdning via GitHub Actions | Väntar på API-nyckel |
+| 4. TestFlight | Ikon, version 0.1, arkivering och uppladdning via GitHub Actions | Klar – 0.1 (1) uppladdad 19 okt 2026 |
 
 ## Kom igång på en Mac
 
