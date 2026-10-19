@@ -1,8 +1,9 @@
 # Beslut och standardval
 
 Där kravspecen ([kravspec.md](kravspec.md)) lämnar något öppet har ett
-standardval gjorts. Varje punkt ska stämmas av med Linus; ändras något
-justeras konstanten i `Engine/Sources/SkovaderEngine/RecommendationConfig.swift`.
+standardval gjorts. Linus har överlåtit besluten till Claude (19 okt 2026);
+valen nedan gäller tills testveckan visar något annat. Ändras något justeras
+konstanten i `Engine/Sources/SkovaderEngine/RecommendationConfig.swift`.
 
 ## Etapp 1 – regelmotorn
 
@@ -30,3 +31,9 @@ justeras konstanten i `Engine/Sources/SkovaderEngine/RecommendationConfig.swift`
 | 15 | Bundle-id och team | `no.linus.skovader` som standard. Team-id och eget bundle-id läggs i `Config/Local.xcconfig` (checkas inte in). |
 | 16 | Enheter och orientering | Bara iPhone, stående läge. |
 | 17 | Integritetsmanifest | `PrivacyInfo.xcprivacy` deklarerar ingen spårning, ingen datainsamling och UserDefaults (CA92.1) för appens egna inställningar. |
+
+## Utveckling
+
+| # | Fråga | Beslut |
+|---|---|---|
+| 18 | Hur verifieras appkoden utan Mac? | GitHub Actions (`.github/workflows/ci.yml`) bygger och testar i iOS-simulatorn på en macOS-runner vid varje push till `main` och varje PR. Regelmotorn testas dessutom i Linux. macOS-minuter räknas tio gånger mot kontots kvot för privata repon. |
