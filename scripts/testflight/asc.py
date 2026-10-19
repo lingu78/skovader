@@ -53,10 +53,21 @@ def der_to_raw(signature: bytes) -> bytes:
     return b"".join(parts)
 
 
+# Alla .p8-nycklar från App Store Connect är P-256-nycklar i PKCS#8, som
+# base64-kodade alltid börjar så här och är 200 tecken långa.
+APPLE_KEY_PREFIX = "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkw"
+APPLE_KEY_LENGTH = 200
+
+
 def normalize_pem(text: str) -> str:
-    """Den base64-kodade nyckeln mellan BEGIN/END, omradbruten med rätta rubriker."""
-    body = re.sub(r"-*\s*(BEGIN|END)\s+[A-Z ]*KEY\s*-*", "", text)
+    """Den base64-kodade nyckeln, omradbruten med rätta rubriker. Text före
+    BEGIN och efter END (t.ex. ett filnamn som följt med) ignoreras."""
+    marked = re.search(r"BEGIN\s+[A-Z ]*KEY-*(.*?)-*\s*END\s+[A-Z ]*KEY", text, re.DOTALL)
+    body = marked.group(1) if marked else text
     body = re.sub(r"[^A-Za-z0-9+/=]", "", body)
+    start = body.find(APPLE_KEY_PREFIX)
+    if start >= 0 and len(body) - start >= APPLE_KEY_LENGTH:
+        body = body[start:start + APPLE_KEY_LENGTH]
     lines = [body[i:i + 64] for i in range(0, len(body), 64)]
     return "-----BEGIN PRIVATE KEY-----\n" + "\n".join(lines) + "\n-----END PRIVATE KEY-----\n"
 
@@ -71,8 +82,9 @@ def fix_key(args) -> None:
         length = len(re.sub(r"-----[A-Z ]+-----|\s", "", pem))
         raise ASCError(
             "ASC_KEY_P8 går inte att läsa som en privat nyckel "
-            f"({length} tecken mellan BEGIN och END; en nyckel från App Store Connect har 184).\n"
-            "Öppna .p8-filen i en textredigerare, kopiera allt och lägg in det på nytt som hemligheten ASC_KEY_P8."
+            f"({length} tecken mellan BEGIN och END; en nyckel från App Store Connect har {APPLE_KEY_LENGTH}).\n"
+            "Öppna .p8-filen i en textredigerare, kopiera allt från -----BEGIN till och med -----END "
+            "(inget filnamn eller annan text) och lägg in det på nytt som hemligheten ASC_KEY_P8."
         )
     print("Nyckeln kan läsas.")
 
