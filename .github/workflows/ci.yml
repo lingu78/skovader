@@ -17,7 +17,7 @@ jobs:
     container: swift:6.1
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: swift test
         working-directory: Engine
         run: swift test
@@ -27,7 +27,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Xcode-version
         run: xcodebuild -version
       - name: Installera XcodeGen
@@ -43,7 +43,8 @@ jobs:
             -destination "id=$SIMULATOR_ID" \
             CODE_SIGNING_ALLOWED=NO \
             > xcodebuild.log 2>&1 && STATUS=0 || STATUS=$?
-          grep -E "error:|warning: .*\.swift|Test Case .* failed|Executed [0-9]+ test|\*\* (BUILD|TEST)" xcodebuild.log | sort -u | head -300 || true
-          echo "--- slutet av loggen ---"
-          tail -40 xcodebuild.log
+          echo "--- slutet av loggen (utan CoreData-brus) ---"
+          grep -v "CoreData: " xcodebuild.log | tail -30
+          echo "--- sammanfattning ---"
+          grep -E "\.swift:[0-9]+:[0-9]+: (error|warning)|xcodebuild: error|Test Case .* failed|Test Suite '.*xctest' (passed|failed)|Executed [0-9]+ test|\*\* (BUILD|TEST) " xcodebuild.log | grep -v "CoreData: " | sort -u | tail -60
           exit $STATUS

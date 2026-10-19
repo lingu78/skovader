@@ -32,6 +32,18 @@ konstanten i `Engine/Sources/SkovaderEngine/RecommendationConfig.swift`.
 | 16 | Enheter och orientering | Bara iPhone, stående läge. |
 | 17 | Integritetsmanifest | `PrivacyInfo.xcprivacy` deklarerar ingen spårning, ingen datainsamling och UserDefaults (CA92.1) för appens egna inställningar. |
 
+## Etapp 2 – skor
+
+| # | Fråga | Beslut |
+|---|---|---|
+| 19 | När väljs bilden? | I redigeraren: "+" öppnar "Ny sko" med knapparna Ta foto / Välj från bildbiblioteket. Allt sker i en vy, så det går snabbt och inga ark öppnas efter varandra. En sko kan sparas utan bild. |
+| 20 | Filformat | Utklippta bilder sparas som PNG (transparent bakgrund), övriga som JPEG med kvalitet 0,8. Längsta sidan högst 1024 px. HEIC används inte – JPEG räcker och PNG behövs för transparensen. |
+| 21 | Stänga av utklippning | Reglaget "Klipp ut skon automatiskt" i redigeraren. Valet kommer ihåg till nästa sko. Misslyckas utklippningen (t.ex. i simulatorn) sparas originalet utan meddelande. |
+| 22 | Ta bort | Långtryck på en sko → Ta bort → bekräftelse, eller knappen Ta bort sko i redigeraren. Svep passar inte i ett rutnät. Bildfilen och historiken tas bort samtidigt. |
+| 23 | Byta typ på befintlig sko | Fyller i typens standardvärden igen (F4). Namn och aktiv behålls. |
+| 24 | Temperaturintervall i redigeraren | Lägsta −40 till 40 °C, högsta −40 till 45 °C. Lägsta kan inte bli högre än högsta. |
+| 25 | Namn saknas | Typens namn visas i stället, t.ex. "Gummistövlar". |
+
 ## Utveckling
 
 | # | Fråga | Beslut |

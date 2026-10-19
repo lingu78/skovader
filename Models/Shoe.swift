@@ -33,6 +33,14 @@ final class Shoe {
         applyDefaults(for: type)
     }
 
+    /// Ny sko från redigerarens utkast.
+    init(profile: ShoeProfile, imageFileName: String? = nil) {
+        self.id = profile.id
+        self.imageFileName = imageFileName
+        self.createdAt = Date()
+        update(from: profile)
+    }
+
     var type: ShoeType {
         get { ShoeType(rawValue: typeRaw) ?? .sneakers }
         set { typeRaw = newValue.rawValue }
@@ -52,6 +60,22 @@ final class Shoe {
         warmth = defaults.warmth
         minTemperature = defaults.minTemperature
         maxTemperature = defaults.maxTemperature
+    }
+
+    /// Skriver in utkastets fält. `id` ändras inte.
+    func update(from profile: ShoeProfile) {
+        name = profile.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        type = profile.type
+        isWaterproof = profile.isWaterproof
+        warmth = profile.warmth
+        minTemperature = min(profile.minTemperature, profile.maxTemperature)
+        maxTemperature = max(profile.minTemperature, profile.maxTemperature)
+        isActive = profile.isActive
+    }
+
+    /// Namnet, eller typens namn om skon saknar namn.
+    var title: String {
+        name.isEmpty ? type.localizedName : name
     }
 
     /// Det regelmotorn behöver.

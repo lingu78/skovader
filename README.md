@@ -13,7 +13,7 @@ nätverksanropet är vädret (Open-Meteo).
 | Etapp | Innehåll | Status |
 |---|---|---|
 | 1. Grund | XcodeGen-projekt, datamodeller, regelmotor med enhetstester | Klar |
-| 2. Skor | Mina skor, kamera/bildval, utklippning, redigering, borttagning | – |
+| 2. Skor | Mina skor, kamera/bildval, utklippning, redigering, borttagning | Klar |
 | 3. Väder och Idag | Open-Meteo, plats/ort, cache, rekommendation, "Jag tar dessa", morgonnotis | – |
 | 4. TestFlight | Ikon, version 0.1 (1), arkivering och uppladdning | – |
 
@@ -55,14 +55,18 @@ scripts/test-engine.sh
 ```
 App/          Appens start och flikar
 Models/       SwiftData: Shoe, WearLog
-Views/        Today, ShoeList (ShoeEditor, Onboarding kommer i etapp 2–3)
+Services/     Bilder (nedskalning, utklippning, filer), spara/ta bort skor
+Views/        Today, ShoeList, ShoeEditor (Onboarding kommer i etapp 3)
 Resources/    Assets, Localizable.xcstrings, PrivacyInfo.xcprivacy
 Engine/       Regelmotorn som eget Swift-paket (bara Foundation)
 Tests/        Apptester (modellerna)
 Config/       xcconfig: bundle-id och team
 ```
 
-Services/ (väder, plats, bilder) tillkommer i etapp 2–3.
+Väder och plats läggs till i Services/ i etapp 3.
+
+CI (`.github/workflows/ci.yml`) bygger och kör alla tester i iOS-simulatorn
+vid varje push till `main`.
 
 ## Regelmotorn
 

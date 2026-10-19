@@ -46,4 +46,14 @@ public struct ShoeProfile: Identifiable, Hashable, Sendable {
             isActive: isActive
         )
     }
+
+    /// Byter typ och fyller i typens standardvärden (F4). Namn och aktiv behålls.
+    public mutating func applyDefaults(for type: ShoeType) {
+        let defaults = type.defaults
+        self.type = type
+        isWaterproof = defaults.isWaterproof
+        warmth = defaults.warmth
+        minTemperature = defaults.minTemperature
+        maxTemperature = defaults.maxTemperature
+    }
 }

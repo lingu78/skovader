@@ -87,6 +87,21 @@ final class ShoeTypeDefaultsTests: XCTestCase {
         XCTAssertTrue(shoe.isActive)
     }
 
+    func testChangingTypeRefillsDefaultsButKeepsNameAndActive() {
+        var shoe = ShoeProfile(name: "Favoriter", type: .sandals, isActive: false)
+        shoe.minTemperature = 12
+
+        shoe.applyDefaults(for: .winterBoots)
+
+        XCTAssertEqual(shoe.type, .winterBoots)
+        XCTAssertEqual(shoe.minTemperature, -30)
+        XCTAssertEqual(shoe.maxTemperature, 5)
+        XCTAssertTrue(shoe.isWaterproof)
+        XCTAssertEqual(shoe.warmth, .warm)
+        XCTAssertEqual(shoe.name, "Favoriter")
+        XCTAssertFalse(shoe.isActive)
+    }
+
     func testTypesHaveSwedishNames() {
         XCTAssertEqual(ShoeType.winterBoots.localizedName, "Vinterkängor / fodrade")
         XCTAssertEqual(WarmthLevel.medium.localizedName, "Mellan")

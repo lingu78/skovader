@@ -28,6 +28,7 @@ targets:
     sources:
       - App
       - Models
+      - Services
       - Views
       - Resources
     dependencies:

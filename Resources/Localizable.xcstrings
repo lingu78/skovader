@@ -1,27 +1,46 @@
 {
   "sourceLanguage" : "sv",
   "strings" : {
-    "Dagens förslag kommer snart" : {
-
-    },
-    "Här samlas dina skor." : {
-
-    },
-    "Idag" : {
-
-    },
-    "Inga skor än" : {
-
-    },
-    "Lägg till dina skor under Mina skor, så får du ett förslag varje morgon." : {
-
-    },
-    "Mina skor" : {
-
-    },
-    "Väder och rekommendation byggs i etapp 3." : {
-
-    }
+    "%@ tas bort tillsammans med bilden och historiken." : {},
+    "Aktiv" : {},
+    "Avbryt" : {},
+    "Bild på skon" : {},
+    "Bilden och historiken för skon tas också bort." : {},
+    "Byt bild" : {},
+    "Dagens förslag kommer snart" : {},
+    "Egenskaper" : {},
+    "Fotografera dina skor så kan Skoväder föreslå vilka som passar dagens väder." : {},
+    "Fotografera skon mot en lugn bakgrund, så klipps den ut automatiskt." : {},
+    "Försök igen." : {},
+    "Högsta %lld °C" : {},
+    "Idag" : {},
+    "Inaktiv" : {},
+    "Inaktiva skor föreslås inte, t.ex. om de har blivit för små." : {},
+    "Inga skor än" : {},
+    "Klipp ut skon automatiskt" : {},
+    "Lägg till dina skor under Mina skor, så får du ett förslag varje morgon." : {},
+    "Lägg till sko" : {},
+    "Lägsta %lld °C" : {},
+    "Mina skor" : {},
+    "Namn, t.ex. Rosa Converse" : {},
+    "Ny sko" : {},
+    "OK" : {},
+    "Redigera" : {},
+    "Redigera sko" : {},
+    "Skon föreslås när den kända temperaturen ligger inom intervallet." : {},
+    "Skon kunde inte sparas" : {},
+    "Spara" : {},
+    "Ta bort" : {},
+    "Ta bort sko" : {},
+    "Ta bort skon?" : {},
+    "Ta foto" : {},
+    "Temperatur" : {},
+    "Typ" : {},
+    "Typen fyller i förslag nedan. Du kan ändra allt." : {},
+    "Vattentät" : {},
+    "Väder och rekommendation byggs i etapp 3." : {},
+    "Välj från bildbiblioteket" : {},
+    "Värme" : {}
   },
   "version" : "1.0"
 }

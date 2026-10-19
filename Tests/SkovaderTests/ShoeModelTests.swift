@@ -52,12 +52,27 @@ final class ShoeModelTests: XCTestCase {
         XCTAssertEqual(shoe.type, .sneakers)
     }
 
+    func testTitleFallsBackToTypeName() {
+        XCTAssertEqual(Shoe(name: "", type: .rubberBoots).title, "Gummistövlar")
+        XCTAssertEqual(Shoe(name: "Stövlar", type: .rubberBoots).title, "Stövlar")
+    }
+
+    func testUpdateFromProfileTrimsNameAndOrdersTemperatures() {
+        var profile = ShoeProfile(name: "  Kängor ", type: .boots)
+        profile.minTemperature = 10
+        profile.maxTemperature = 2
+
+        let shoe = Shoe(profile: profile)
+
+        XCTAssertEqual(shoe.id, profile.id)
+        XCTAssertEqual(shoe.name, "Kängor")
+        XCTAssertEqual(shoe.minTemperature, 2)
+        XCTAssertEqual(shoe.maxTemperature, 10)
+    }
+
     @MainActor
     func testShoeAndWearLogArePersisted() throws {
-        let container = try ModelContainer(
-            for: Shoe.self, WearLog.self,
-            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-        )
+        let container = try makeInMemoryContainer()
         let context = container.mainContext
         let shoe = Shoe(name: "Kängor", type: .boots)
         context.insert(shoe)
