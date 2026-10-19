@@ -125,7 +125,9 @@ def clean_key_id(value: str) -> str:
 
 
 def clean_issuer_id(value: str) -> str:
-    """Issuer ID är ett UUID. Tål mellanslag och radbrytningar runt om."""
+    """Issuer ID är ett UUID. Tål mellanslag, radbrytningar och typografiska
+    bindestreck som kan följa med vid kopiering från en webbsida."""
+    value = re.sub(r"[\u2010-\u2015\u2212]", "-", value)
     match = re.search(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}", value)
     return match.group(0).lower() if match else value.strip()
 
