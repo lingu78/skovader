@@ -88,6 +88,16 @@ def fix_key(args) -> None:
         )
     print("Nyckeln kan läsas.")
 
+    key_id, issuer_id, _ = credentials()
+    problems = []
+    if not re.fullmatch(r"[A-Z0-9]{10}", key_id):
+        problems.append(f"ASC_KEY_ID ska vara 10 tecken (A–Z, 0–9) men har {len(key_id)}.")
+    if not re.fullmatch(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", issuer_id):
+        problems.append(f"ASC_ISSUER_ID ska vara ett id med bindestreck (36 tecken) men har {len(issuer_id)}.")
+    if problems:
+        raise ASCError("\n".join(problems))
+    print("Key ID och Issuer ID har rätt format.")
+
 
 def make_token(key_id: str, issuer_id: str, key_path: str, now: int | None = None) -> str:
     """JWT (ES256) för App Store Connect, giltig i 15 minuter."""
@@ -107,11 +117,31 @@ def make_token(key_id: str, issuer_id: str, key_path: str, now: int | None = Non
     return f"{header}.{payload}.{b64url(der_to_raw(der))}"
 
 
+def clean_key_id(value: str) -> str:
+    """Key ID är 10 tecken. Tål mellanslag och hela filnamnet AuthKey_XXXXXXXXXX.p8."""
+    match = re.search(r"(?:AuthKey_)?([A-Z0-9]{10})(?:\.p8)?", value.strip().upper())
+    return match.group(1) if match else value.strip()
+
+
+def clean_issuer_id(value: str) -> str:
+    """Issuer ID är ett UUID. Tål mellanslag och radbrytningar runt om."""
+    match = re.search(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}", value)
+    return match.group(0).lower() if match else value.strip()
+
+
+def credentials() -> tuple[str, str, str]:
+    return (
+        clean_key_id(os.environ["ASC_KEY_ID"]),
+        clean_issuer_id(os.environ["ASC_ISSUER_ID"]),
+        os.environ["ASC_KEY_PATH"],
+    )
+
+
 def api(method: str, path: str, body: dict | None = None, query: dict | None = None):
     url = API + path
     if query:
         url += "?" + urllib.parse.urlencode(query)
-    token = make_token(os.environ["ASC_KEY_ID"], os.environ["ASC_ISSUER_ID"], os.environ["ASC_KEY_PATH"])
+    token = make_token(*credentials())
     request = urllib.request.Request(
         url,
         data=json.dumps(body).encode() if body is not None else None,
@@ -124,7 +154,17 @@ def api(method: str, path: str, body: dict | None = None, query: dict | None = N
             return json.loads(raw) if raw else None
     except urllib.error.HTTPError as error:
         detail = error.read().decode(errors="replace")
-        raise ASCError(f"App Store Connect svarade {error.code} på {method} {path}:\n{detail}") from None
+        hint = ""
+        if error.code == 401:
+            hint = (
+                "\nApple godtar inte nyckeln. Kontrollera att\n"
+                "- ASC_KEY_ID är Key ID för just den nyckel som ligger i ASC_KEY_P8 (står i filnamnet AuthKey_XXXXXXXXXX.p8),\n"
+                "- ASC_ISSUER_ID är Issuer ID överst på sidan Team Keys,\n"
+                "- nyckeln är en Team Key (inte Individual Key) och inte återkallad."
+            )
+        elif error.code == 403:
+            hint = "\nNyckeln saknar behörighet. Den behöver rollen Admin."
+        raise ASCError(f"App Store Connect svarade {error.code} på {method} {path}:\n{detail}{hint}") from None
 
 
 def find_app(bundle_id: str) -> dict:
