@@ -1,0 +1,31 @@
+name: Open-Meteo-kontroll
+
+# Startas för hand (Actions → Open-Meteo-kontroll → Run workflow) för att se att
+# Open-Meteo fortfarande svarar med de fält appen läser.
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Hämta prognos som appen gör
+        run: |
+          curl -sSf --retry 3 -o forecast.json \
+            "https://api.open-meteo.com/v1/forecast?latitude=59.33&longitude=18.07&hourly=apparent_temperature,precipitation,rain,showers,snowfall,wind_speed_10m,weather_code&wind_speed_unit=ms&timezone=auto&forecast_days=2"
+      - name: Kontrollera fälten
+        run: |
+          python3 - <<'PY'
+          import json
+          data = json.load(open("forecast.json"))
+          hourly = data["hourly"]
+          fields = ["time", "apparent_temperature", "precipitation", "rain", "showers", "snowfall", "wind_speed_10m", "weather_code"]
+          for field in fields:
+              assert field in hourly, f"saknar {field}"
+              assert len(hourly[field]) == 48, f"{field}: {len(hourly[field])} värden"
+          assert isinstance(data["timezone"], str) and isinstance(data["utc_offset_seconds"], int)
+          assert len(hourly["time"][0]) == 16, hourly["time"][0]  # yyyy-MM-ddTHH:mm
+          print("OK:", data["timezone"], hourly["time"][0], "…", hourly["time"][-1])
+          print("Enheter:", data["hourly_units"])
+          PY
