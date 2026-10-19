@@ -22,8 +22,8 @@ Byggnumret blir automatiskt ett högre än det senast uppladdade.
    profiler) → *Generate* → ladda ned `.p8`-filen (går bara en gång). Notera
    *Key ID* och *Issuer ID* (överst på sidan).
 4. **Hemligheter i GitHub:**
-   <https://github.com/lingu78/skovader/settings/secrets/actions> →
-   *New repository secret*, tre stycken:
+   <https://github.com/lingu78/skovader/settings/secrets/actions> → fliken
+   *Secrets* → *New repository secret* (inte *Environment secrets*), tre stycken:
 
    | Namn | Värde |
    |---|---|

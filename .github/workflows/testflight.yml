@@ -17,21 +17,27 @@ jobs:
     timeout-minutes: 45
     env:
       BUNDLE_ID: no.linus.skovader
-      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      # Key ID och Issuer ID är inte hemliga och får också ligga som variabler.
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID || vars.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID || vars.ASC_ISSUER_ID }}
     steps:
       - uses: actions/checkout@v5
 
       - name: API-nyckel
         env:
           ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          P8_IS_VARIABLE: ${{ vars.ASC_KEY_P8 != '' }}
         run: |
+          if [ -z "$ASC_KEY_P8" ] && [ "$P8_IS_VARIABLE" = "true" ]; then
+            echo "::error::ASC_KEY_P8 ligger under Variables. Den är hemlig – ta bort variabeln och lägg in den under Secrets i stället."
+            exit 1
+          fi
           missing=""
           [ -n "$ASC_KEY_ID" ] || missing="$missing ASC_KEY_ID"
           [ -n "$ASC_ISSUER_ID" ] || missing="$missing ASC_ISSUER_ID"
           [ -n "$ASC_KEY_P8" ] || missing="$missing ASC_KEY_P8"
           if [ -n "$missing" ]; then
-            echo "::error::Saknar hemligheter:$missing. Lägg in dem under Settings → Secrets and variables → Actions (se docs/testflight.md)."
+            echo "::error::Saknar:$missing. Lägg in dem i repot skovader under Settings → Secrets and variables → Actions → Secrets → Repository secrets (inte Environment secrets). Se docs/testflight.md."
             exit 1
           fi
           SIGNING_DIR="$RUNNER_TEMP/signing"
