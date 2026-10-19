@@ -15,7 +15,7 @@ nätverksanropet är vädret (Open-Meteo).
 | 1. Grund | XcodeGen-projekt, datamodeller, regelmotor med enhetstester | Klar |
 | 2. Skor | Mina skor, kamera/bildval, utklippning, redigering, borttagning | Klar |
 | 3. Väder och Idag | Open-Meteo, plats/ort, cache, rekommendation, "Jag tar dessa", morgonnotis | Klar |
-| 4. TestFlight | Ikon, version 0.1 (1), arkivering och uppladdning | – |
+| 4. TestFlight | Ikon, version 0.1, arkivering och uppladdning via GitHub Actions | Väntar på API-nyckel |
 
 ## Kom igång på en Mac
 
@@ -50,6 +50,13 @@ cd Engine && swift test
 scripts/test-engine.sh
 ```
 
+## TestFlight
+
+Byggs, signeras och laddas upp av GitHub Actions på en Mac hos GitHub:
+*Actions* → *TestFlight* → *Run workflow*. Engångsstegen (app i App Store
+Connect, API-nyckel, hemligheter i GitHub) finns i
+[docs/testflight.md](docs/testflight.md).
+
 ## Struktur
 
 ```
@@ -62,6 +69,8 @@ Resources/    Assets, Localizable.xcstrings, PrivacyInfo.xcprivacy
 Engine/       Regelmotorn som eget Swift-paket (bara Foundation)
 Tests/        Apptester (modeller, bilder, väder, cache, plats, val)
 Config/       xcconfig: bundle-id och team
+design/       Appikonens källa (SVG)
+scripts/      Testskript och App Store Connect-API för TestFlight
 ```
 
 CI (`.github/workflows/ci.yml`) bygger och kör alla tester i iOS-simulatorn

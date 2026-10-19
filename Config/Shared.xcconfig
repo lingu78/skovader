@@ -4,5 +4,7 @@
 
 SKOVADER_BUNDLE_ID = no.linus.skovader
 DEVELOPMENT_TEAM =
+// Används bara vid manuell signering (TestFlight-flödet i GitHub Actions).
+SKOVADER_PROVISIONING_PROFILE =
 
 #include? "Local.xcconfig"

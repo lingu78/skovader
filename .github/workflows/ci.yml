@@ -48,3 +48,28 @@ jobs:
           echo "--- sammanfattning ---"
           grep -E "\.swift:[0-9]+:[0-9]+: (error|warning)|xcodebuild: error|Test Case .* failed|Test Suite '.*xctest' (passed|failed)|Executed [0-9]+ test|\*\* (BUILD|TEST) " xcodebuild.log | grep -v "CoreData: " | sort -u | tail -60
           exit $STATUS
+
+  release-build:
+    name: Release-bygge för iPhone (osignerat)
+    # Körs bara när CI startas för hand, för att se att Release-bygget går
+    # igenom innan något laddas upp till TestFlight.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - name: Generera projektet
+        run: |
+          command -v xcodegen || brew install xcodegen
+          xcodegen generate
+      - name: Bygg
+        run: |
+          xcodebuild build \
+            -project Skovader.xcodeproj \
+            -scheme Skovader \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO \
+            > build.log 2>&1 && STATUS=0 || STATUS=$?
+          grep -E "\.swift:[0-9]+:[0-9]+: (error|warning)|error:|\*\* BUILD" build.log | sort -u | tail -60 || true
+          exit $STATUS

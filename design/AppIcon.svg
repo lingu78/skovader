@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Skovaders appikon: en sko under sol och moln. Källfil för AppIcon.png. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7EC8F2"/>
+      <stop offset="1" stop-color="#D9F1FD"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.45" cy="0.4" r="0.6">
+      <stop offset="0" stop-color="#FFE27A"/>
+      <stop offset="1" stop-color="#FFB632"/>
+    </radialGradient>
+    <linearGradient id="upper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF8C7A"/>
+      <stop offset="1" stop-color="#EE6656"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+
+  <!-- Sol -->
+  <circle cx="700" cy="290" r="225" fill="#FFFFFF" opacity="0.28"/>
+  <circle cx="700" cy="290" r="165" fill="url(#sun)"/>
+
+  <!-- Moln -->
+  <g fill="#FFFFFF">
+    <circle cx="530" cy="400" r="95"/>
+    <circle cx="650" cy="360" r="125"/>
+    <circle cx="785" cy="405" r="95"/>
+    <rect x="430" y="390" width="450" height="110" rx="55"/>
+  </g>
+
+  <!-- Sko -->
+  <g transform="translate(512 760) scale(1.06) translate(-522 -770)">
+    <path d="M 165 790
+             L 178 650
+             Q 186 588 246 584
+             L 330 584
+             Q 362 586 384 612
+             Q 404 636 432 628
+             L 470 548
+             Q 482 520 514 524
+             L 566 536
+             Q 592 545 598 572
+             L 616 636
+             Q 708 676 806 706
+             Q 874 732 880 790
+             Z" fill="url(#upper)"/>
+    <!-- Snörning -->
+    <g stroke="#FFFFFF" stroke-width="18" stroke-linecap="round">
+      <line x1="472" y1="608" x2="560" y2="584"/>
+      <line x1="500" y1="652" x2="586" y2="626"/>
+      <line x1="534" y1="692" x2="612" y2="664"/>
+    </g>
+    <!-- Hälkappa och tåhätta -->
+    <path d="M 178 650 Q 186 588 246 584 L 262 584 Q 226 640 236 790 L 165 790 Z" fill="#D94F42" opacity="0.55"/>
+    <path d="M 760 700 Q 868 724 880 790 L 742 790 Q 728 736 760 700 Z" fill="#FFFFFF" opacity="0.9"/>
+    <!-- Sula -->
+    <rect x="150" y="772" width="745" height="78" rx="39" fill="#FFFFFF"/>
+    <rect x="150" y="824" width="745" height="26" rx="13" fill="#DCE6EE"/>
+  </g>
+</svg>

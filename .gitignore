@@ -22,3 +22,6 @@ Config/Local.xcconfig
 *.ipa
 
 .DS_Store
+
+# Python
+__pycache__/

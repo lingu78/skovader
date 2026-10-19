@@ -60,6 +60,17 @@ konstanten i `Engine/Sources/SkovaderEngine/RecommendationConfig.swift`.
 | 35 | Ortsökning | CLGeocoder enligt kravspecen. Kan bytas mot MapKits geokodning om Apple tar bort CLGeocoder. |
 | 36 | Väderikon | Nederbörd (från 1 mm) och blåst (från 10 m/s) först, annars den vanligaste himlen enligt timmarnas WMO-koder. |
 
+## Etapp 4 – TestFlight
+
+| # | Fråga | Beslut |
+|---|---|---|
+| 37 | Bygge utan egen Mac | GitHub Actions på `macos-latest` arkiverar och laddar upp med `xcodebuild -exportArchive` och API-nyckeln (`.github/workflows/testflight.yml`). |
+| 38 | Signering utan registrerad iPhone | Automatisk signering kräver en registrerad enhet. Arbetsflödet skapar i stället ett tillfälligt distributionscertifikat och en App Store-profil via App Store Connect-API:t, signerar manuellt och tar bort båda efteråt. Uppladdade byggen påverkas inte. |
+| 39 | Byggnummer | Ett högre än det högsta som redan finns i App Store Connect; första bygget blir 1. Versionen (0.1) står i `project.yml`. |
+| 40 | Egen app i App Store Connect | Skoväder får en egen app (`no.linus.skovader`). Den befintliga testappen (Rastcamp) används inte, eftersom ett bygge bara kan laddas upp till appen med samma bundle-id. |
+| 41 | API-nyckelns roll | Admin, eftersom nyckeln skapar certifikat och profiler. Nyckeln ligger bara som hemlighet i GitHub. |
+| 42 | Appikon | Sko under sol och moln i mjuka färger, 1024 px utan genomskinlighet. Källan är `design/AppIcon.svg`. |
+
 ## Utveckling
 
 | # | Fråga | Beslut |
