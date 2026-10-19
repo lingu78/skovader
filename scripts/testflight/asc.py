@@ -88,7 +88,8 @@ def fix_key(args) -> None:
         )
     print("Nyckeln kan läsas.")
 
-    key_id, issuer_id, _ = credentials()
+    key_id = clean_key_id(os.environ.get("ASC_KEY_ID", ""))
+    issuer_id = clean_issuer_id(os.environ.get("ASC_ISSUER_ID", ""))
     problems = []
     if not re.fullmatch(r"[A-Z0-9]{10}", key_id):
         problems.append(f"ASC_KEY_ID ska vara 10 tecken (A–Z, 0–9) men har {len(key_id)}.")
