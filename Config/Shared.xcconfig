@@ -1,0 +1,8 @@
+// Gemensamma byggvärden för Skoväder.
+// Personliga värden (team-id, eget bundle-id) läggs i Local.xcconfig, som inte
+// checkas in. Kopiera Local.xcconfig.example till Local.xcconfig och fyll i.
+
+SKOVADER_BUNDLE_ID = no.linus.skovader
+DEVELOPMENT_TEAM =
+
+#include? "Local.xcconfig"

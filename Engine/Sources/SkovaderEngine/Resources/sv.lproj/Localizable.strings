@@ -1,0 +1,55 @@
+/* Skotyper (F4) */
+"shoeType.sandals" = "Sandaler";
+"shoeType.sneakers" = "Sneakers / tygskor";
+"shoeType.leatherSneakers" = "Lädersneakers / finskor";
+"shoeType.waterproofSneakers" = "Vattentäta sneakers / löparskor";
+"shoeType.boots" = "Kängor / boots";
+"shoeType.winterBoots" = "Vinterkängor / fodrade";
+"shoeType.rubberBoots" = "Gummistövlar";
+
+/* Typnamn i löptext när skon saknar eget namn: "dina gummistövlar …" */
+"shoeType.sandals.short" = "sandaler";
+"shoeType.sneakers.short" = "sneakers";
+"shoeType.leatherSneakers.short" = "lädersneakers";
+"shoeType.waterproofSneakers.short" = "vattentäta sneakers";
+"shoeType.boots.short" = "kängor";
+"shoeType.winterBoots.short" = "vinterkängor";
+"shoeType.rubberBoots.short" = "gummistövlar";
+
+/* Värmenivå (F3) */
+"warmth.1" = "Lätt";
+"warmth.2" = "Mellan";
+"warmth.3" = "Varm";
+
+/* Väder. %ld = grader (känd temperatur), avrundat. */
+"weather.temperature.single" = "Det blir %ld grader";
+"weather.temperature.single.one" = "Det blir %ld grad";
+"weather.temperature.range" = "Det blir %ld till %ld grader";
+"weather.rain" = "regn";
+"weather.heavyRain" = "mycket regn";
+"weather.snow" = "snö";
+"weather.sleet" = "snöblandat regn";
+"weather.windy" = "blåsigt";
+/* "Det blir 4 grader" + " och regn" */
+"weather.join.one" = "%@ och %@";
+/* "Det blir 4 grader" + ", regn och blåsigt" */
+"weather.join.two" = "%@, %@ och %@";
+
+/* Skälet för en sko. %@ = skons namn. */
+"reason.heavyRainRubberBoots" = "dina %@ klarar alla vattenpölar";
+"reason.snowWinterBoots" = "dina %@ håller fötterna varma och torra";
+"reason.notWaterproof" = "dina %@ är inte vattentäta och kan bli blöta";
+"reason.tooColdForSnow" = "dina %@ kan bli kalla i snön";
+"reason.keepsDry" = "dina %@ håller fötterna torra";
+"reason.unnecessarilyWarm" = "dina %@ blir nog för varma idag";
+"reason.mightBeCold" = "det kan bli lite kallt i dina %@";
+"reason.mightBeWarm" = "det kan bli lite varmt i dina %@";
+"reason.warmDay" = "perfekt väder för dina %@";
+"reason.coldDay" = "dina %@ håller fötterna varma";
+"reason.goodFit" = "dina %@ passar bra idag";
+
+/* Hela motiveringen: väder – skäl. */
+"explanation.format" = "%@ – %@.";
+
+/* Steg 3: ingen sko över tröskeln. %@ = skons namn. */
+"poorFit.message" = "Inga av dina skor passar riktigt idag – närmast är %@.";

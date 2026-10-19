@@ -1,0 +1,7 @@
+// Kopiera till Config/Local.xcconfig (ignoreras av Git) och fyll i.
+
+// Team-id från developer.apple.com → Membership details (10 tecken).
+DEVELOPMENT_TEAM = ABCDE12345
+
+// Måste matcha appen i App Store Connect.
+SKOVADER_BUNDLE_ID = no.linus.skovader

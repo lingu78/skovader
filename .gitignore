@@ -1,0 +1,24 @@
+# Genereras av XcodeGen (`xcodegen generate`)
+*.xcodeproj/
+App/Info.plist
+
+# Xcode
+DerivedData/
+build/
+xcuserdata/
+*.xcuserstate
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Lokala inställningar och hemligheter – aldrig i Git
+Config/Local.xcconfig
+*.p8
+.env
+
+# Arkiv och exporter
+*.xcarchive
+*.ipa
+
+.DS_Store

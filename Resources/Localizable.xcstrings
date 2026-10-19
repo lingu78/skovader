@@ -1,0 +1,27 @@
+{
+  "sourceLanguage" : "sv",
+  "strings" : {
+    "Dagens förslag kommer snart" : {
+
+    },
+    "Här samlas dina skor." : {
+
+    },
+    "Idag" : {
+
+    },
+    "Inga skor än" : {
+
+    },
+    "Lägg till dina skor under Mina skor, så får du ett förslag varje morgon." : {
+
+    },
+    "Mina skor" : {
+
+    },
+    "Väder och rekommendation byggs i etapp 3." : {
+
+    }
+  },
+  "version" : "1.0"
+}
