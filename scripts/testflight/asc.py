@@ -6,6 +6,9 @@
            tillfälligt distributionscertifikat och en App Store-profil.
   cleanup  Tar bort certifikatet och profilen igen. Redan uppladdade byggen
            påverkas inte – Apple signerar om dem för TestFlight.
+  fix-key  Bygger om en inklistrad .p8-nyckel till korrekt PEM (tappade
+           bindestreck, Windows-radbrytningar, allt på en rad) och kontrollerar
+           att openssl kan läsa den.
 
 Läser ASC_KEY_ID, ASC_ISSUER_ID och ASC_KEY_PATH (sökväg till .p8-filen)
 från miljön. Bara Pythons standardbibliotek och openssl behövs.
@@ -15,6 +18,7 @@ import argparse
 import base64
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -49,6 +53,30 @@ def der_to_raw(signature: bytes) -> bytes:
     return b"".join(parts)
 
 
+def normalize_pem(text: str) -> str:
+    """Den base64-kodade nyckeln mellan BEGIN/END, omradbruten med rätta rubriker."""
+    body = re.sub(r"-*\s*(BEGIN|END)\s+[A-Z ]*KEY\s*-*", "", text)
+    body = re.sub(r"[^A-Za-z0-9+/=]", "", body)
+    lines = [body[i:i + 64] for i in range(0, len(body), 64)]
+    return "-----BEGIN PRIVATE KEY-----\n" + "\n".join(lines) + "\n-----END PRIVATE KEY-----\n"
+
+
+def fix_key(args) -> None:
+    with open(args.path) as file:
+        pem = normalize_pem(file.read())
+    with open(args.path, "w") as file:
+        file.write(pem)
+    check = subprocess.run(["openssl", "pkey", "-in", args.path, "-noout"], capture_output=True, text=True)
+    if check.returncode != 0:
+        length = len(re.sub(r"-----[A-Z ]+-----|\s", "", pem))
+        raise ASCError(
+            "ASC_KEY_P8 går inte att läsa som en privat nyckel "
+            f"({length} tecken mellan BEGIN och END; en nyckel från App Store Connect har 184).\n"
+            "Öppna .p8-filen i en textredigerare, kopiera allt och lägg in det på nytt som hemligheten ASC_KEY_P8."
+        )
+    print("Nyckeln kan läsas.")
+
+
 def make_token(key_id: str, issuer_id: str, key_path: str, now: int | None = None) -> str:
     """JWT (ES256) för App Store Connect, giltig i 15 minuter."""
     now = int(time.time()) if now is None else now
@@ -60,10 +88,10 @@ def make_token(key_id: str, issuer_id: str, key_path: str, now: int | None = Non
         "aud": "appstoreconnect-v1",
     }).encode())
     signing_input = f"{header}.{payload}".encode()
-    der = subprocess.run(
-        ["openssl", "dgst", "-sha256", "-sign", key_path],
-        input=signing_input, capture_output=True, check=True,
-    ).stdout
+    result = subprocess.run(["openssl", "dgst", "-sha256", "-sign", key_path], input=signing_input, capture_output=True)
+    if result.returncode != 0:
+        raise ASCError("Kunde inte signera med API-nyckeln: " + result.stderr.decode(errors="replace").strip())
+    der = result.stdout
     return f"{header}.{payload}.{b64url(der_to_raw(der))}"
 
 
@@ -211,9 +239,13 @@ def main() -> None:
     cleanup_parser = commands.add_parser("cleanup")
     cleanup_parser.add_argument("--out", required=True)
 
+    fix_key_parser = commands.add_parser("fix-key")
+    fix_key_parser.add_argument("path")
+
     args = parser.parse_args()
+    handlers = {"prepare": prepare, "cleanup": cleanup, "fix-key": fix_key}
     try:
-        prepare(args) if args.command == "prepare" else cleanup(args)
+        handlers[args.command](args)
     except ASCError as error:
         print(f"::error::{error}".replace("\n", "%0A"))
         sys.exit(1)
