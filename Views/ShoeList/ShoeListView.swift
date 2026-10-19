@@ -4,6 +4,9 @@ import SwiftUI
 /// Mina skor (F5): rutnät med bilder. Tryck öppnar redigering, långtryck ger
 /// en meny där skon kan tas bort efter bekräftelse.
 struct ShoeListView: View {
+    /// Sätts av Idag eller introduktionen för att öppna "Ny sko" direkt.
+    @Binding var addShoeRequested: Bool
+
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Shoe.createdAt) private var shoes: [Shoe]
 
@@ -31,6 +34,8 @@ struct ShoeListView: View {
                     }
                 }
             }
+            .onAppear(perform: openRequestedEditor)
+            .onChange(of: addShoeRequested) { _, _ in openRequestedEditor() }
             .sheet(item: $editorTarget, onDismiss: deleteShoeFromEditor) { target in
                 ShoeEditorView(shoe: target.shoe) { shoe in
                     deleteAfterEditor = shoe
@@ -92,6 +97,12 @@ struct ShoeListView: View {
         }
     }
 
+    private func openRequestedEditor() {
+        guard addShoeRequested else { return }
+        addShoeRequested = false
+        editorTarget = EditorTarget(shoe: nil)
+    }
+
     private func deleteShoeFromEditor() {
         guard let shoe = deleteAfterEditor else { return }
         deleteAfterEditor = nil
@@ -112,6 +123,6 @@ private struct PendingDeletion {
 }
 
 #Preview {
-    ShoeListView()
+    ShoeListView(addShoeRequested: .constant(false))
         .modelContainer(for: [Shoe.self, WearLog.self], inMemory: true)
 }

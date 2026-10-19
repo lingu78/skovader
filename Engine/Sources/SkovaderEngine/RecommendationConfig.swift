@@ -4,6 +4,15 @@ import Foundation
 /// efter testveckan. Avsnitt "Rekommendationslogik" i kravspecen.
 public struct RecommendationConfig: Equatable, Sendable {
 
+    // MARK: Vädrets tidsfönster
+
+    /// Rekommendationen gäller dagen mellan dessa klockslag (lokal tid).
+    public var weatherWindowStartHour: Int = 7
+    public var weatherWindowEndHour: Int = 18
+    /// Andel snö (av nederbördens vattenmängd) som räknas som snöblandat
+    /// regn: mellan denna andel och 1 minus denna andel.
+    public var sleetMinimumShare: Double = 0.25
+
     // MARK: Steg 1 – filtrering
 
     /// En sko filtreras bort om dagens min ligger mer än så här många grader

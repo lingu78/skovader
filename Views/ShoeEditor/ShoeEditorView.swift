@@ -13,7 +13,7 @@ struct ShoeEditorView: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @AppStorage("autoCutout") private var autoCutout = true
+    @AppStorage(SettingsKey.autoCutout) private var autoCutout = true
 
     @State private var draft: ShoeProfile
     @State private var photo = EditablePhoto()

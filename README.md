@@ -14,7 +14,7 @@ nätverksanropet är vädret (Open-Meteo).
 |---|---|---|
 | 1. Grund | XcodeGen-projekt, datamodeller, regelmotor med enhetstester | Klar |
 | 2. Skor | Mina skor, kamera/bildval, utklippning, redigering, borttagning | Klar |
-| 3. Väder och Idag | Open-Meteo, plats/ort, cache, rekommendation, "Jag tar dessa", morgonnotis | – |
+| 3. Väder och Idag | Open-Meteo, plats/ort, cache, rekommendation, "Jag tar dessa", morgonnotis | Klar |
 | 4. TestFlight | Ikon, version 0.1 (1), arkivering och uppladdning | – |
 
 ## Kom igång på en Mac
@@ -55,15 +55,14 @@ scripts/test-engine.sh
 ```
 App/          Appens start och flikar
 Models/       SwiftData: Shoe, WearLog
-Services/     Bilder (nedskalning, utklippning, filer), spara/ta bort skor
-Views/        Today, ShoeList, ShoeEditor (Onboarding kommer i etapp 3)
+Services/     Väder (Open-Meteo, cache), plats och ort, bilder, notis,
+              spara/ta bort skor, "Jag tar dessa"
+Views/        Today, ShoeList, ShoeEditor, Settings, Onboarding
 Resources/    Assets, Localizable.xcstrings, PrivacyInfo.xcprivacy
 Engine/       Regelmotorn som eget Swift-paket (bara Foundation)
-Tests/        Apptester (modellerna)
+Tests/        Apptester (modeller, bilder, väder, cache, plats, val)
 Config/       xcconfig: bundle-id och team
 ```
-
-Väder och plats läggs till i Services/ i etapp 3.
 
 CI (`.github/workflows/ci.yml`) bygger och kör alla tester i iOS-simulatorn
 vid varje push till `main`.
@@ -84,7 +83,18 @@ motivering i klartext.
   (sol, regn, snö, snöblandat, blåst, kyla), varje regel med gränsvärden,
   rotation, tomma lägen och motiveringstexterna.
 
+## Väder
+
+`WeatherService` är ett protokoll; `OpenMeteoWeatherService` hämtar timdata
+för idag och imorgon. `WeatherStore` cachar prognosen i en timme och visar
+senaste cachen offline. Regelmotorn sammanfattar timmarna 07–18 till
+`DayWeather` (`DayWeather.summarizing`). Väderdata från
+[Open-Meteo.com](https://open-meteo.com/) (CC BY 4.0).
+
 ## Integritet
 
 Inga konton, ingen analys, inga tredjepartspaket. Bilder och skodata lämnar
-aldrig telefonen. App Privacy i App Store Connect: "Data Not Collected".
+aldrig telefonen. Till Open-Meteo skickas bara positionen avrundad till 2
+decimaler (ca 1 km). Positionen översätts inte till ortnamn, så den skickas
+inte till Apple. Vid manuell ort skickas bara söktexten till Apples
+geokodning. App Privacy i App Store Connect: "Data Not Collected".

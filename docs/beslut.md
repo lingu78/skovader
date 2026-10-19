@@ -44,6 +44,22 @@ konstanten i `Engine/Sources/SkovaderEngine/RecommendationConfig.swift`.
 | 24 | Temperaturintervall i redigeraren | Lägsta −40 till 40 °C, högsta −40 till 45 °C. Lägsta kan inte bli högre än högsta. |
 | 25 | Namn saknas | Typens namn visas i stället, t.ex. "Gummistövlar". |
 
+## Etapp 3 – väder och Idag
+
+| # | Fråga | Beslut |
+|---|---|---|
+| 26 | Exakt tidsfönster | Temperatur och vind från timmarna 07–18. Nederbörd från timmarna 08–18, eftersom Open-Meteo anger nederbörden för timmen före – tillsammans 07:00–18:00. Timmarna ligger i `RecommendationConfig`. |
+| 27 | Regn eller snö? | Andelen snö av nederbördens vattenmängd: minst 75 % = snö, högst 25 % = regn, däremellan snöblandat (`sleetMinimumShare`). 7 cm snö räknas som 10 mm vatten. |
+| 28 | Cache | En timme. Neddragning hämtar alltid. Ny plats eller ny dag hämtar också. Prognosen gäller idag och imorgon, så gårdagskvällens cache räcker offline nästa morgon. Sparas i Application Support. |
+| 29 | När frågar appen om plats? | Bara när användaren trycker på en knapp: i introduktionen, på kortet "Var är du?" under Idag eller i Inställningar. Aldrig av sig själv. |
+| 30 | Platsens namn | "Din plats" när telefonens position används. Ingen omvänd geokodning, så positionen skickas inte till Apple. Vid vald ort visas ortens namn. |
+| 31 | "Jag tar dessa" flera gånger samma dag | Senaste valet gäller; tidigare val samma dag ersätts. Ett par som inte föreslogs men valts tidigare visas som "Idag har du valt …". |
+| 32 | Idag på kvällen | Visar fortfarande dagens 07–18. |
+| 33 | Morgonnotis | Text enligt kravet, upprepas varje dag på vald tid (standard 07:00). Tillstånd frågas när reglaget slås på; nekas det stängs reglaget av med en förklaring. |
+| 34 | Källhänvisning | Open-Meteos data är CC BY 4.0, så Idag och Inställningar länkar till Open-Meteo.com. |
+| 35 | Ortsökning | CLGeocoder enligt kravspecen. Kan bytas mot MapKits geokodning om Apple tar bort CLGeocoder. |
+| 36 | Väderikon | Nederbörd (från 1 mm) och blåst (från 10 m/s) först, annars den vanligaste himlen enligt timmarnas WMO-koder. |
+
 ## Utveckling
 
 | # | Fråga | Beslut |
